@@ -634,7 +634,9 @@ func opTimedCreate(pc *uint64, interpreter *GethEVMInterpreter, scope *ScopeCont
 		gas          = scope.Contract.Gas
 	)
 	if interpreter.evm.chainRules.IsEIP150 {
-		gas -= gas / 64
+		if !interpreter.evm.Config.IgnoreGas {
+			gas -= gas / 64
+		}
 	}
 	// reuse size int for stackvalue
 	stackvalue := size
@@ -680,7 +682,9 @@ func opCreate2(pc *uint64, interpreter *GethEVMInterpreter, scope *ScopeContext)
 	)
 
 	// Apply EIP150
-	gas -= gas / 64
+	if !interpreter.evm.Config.IgnoreGas {
+		gas -= gas / 64
+	}
 	scope.Contract.UseGas(gas)
 	// reuse size int for stackvalue
 	stackvalue := size
@@ -717,7 +721,9 @@ func opTimedCreate2(pc *uint64, interpreter *GethEVMInterpreter, scope *ScopeCon
 	)
 
 	// Apply EIP150
-	gas -= gas / 64
+	if !interpreter.evm.Config.IgnoreGas {
+		gas -= gas / 64
+	}
 	scope.Contract.UseGas(gas)
 	// reuse size int for stackvalue
 	stackvalue := size
